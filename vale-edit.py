@@ -52,24 +52,6 @@ def edit_special_words(line: str, start: int, end: int, replacement: str) -> str
     return revised_line
 
 
-def edit_spacing(line: str, start: int, end: int) -> str:
-    """
-    Standardize spacing around punctuation
-    Gobal line edit
-
-    Parameters:
-        line (str) -- line from input Markdown
-        start (int) -- edit start index
-        end (int) -- edit end index
-    Returns:
-        str -- input line sans punctuation
-    """
-    line = re.sub(r' +([.,:;?!])', r'\1', line)
-    line = re.sub(r'([.,:;?!])(?![ \n\t.,:;?!*]|\Z)', r'\1 ', line)
-    line = re.sub(r'([.,:;?!]) +', r'\1 ', line)
-    return line.strip()
-
-
 def edit_header_punct(line: str, start: int, end: int) -> str:
     """
     Remove punctuation from headers
@@ -141,6 +123,24 @@ def edit_headcase(line: str, start: int, end: int, yml_file: str) -> str:
     return revised_line
 
 
+def edit_spacing(line: str, start: int, end: int) -> str:
+    """
+    Standardize spacing around punctuation
+    Gobal line edit
+
+    Parameters:
+        line (str) -- line from input Markdown
+        start (int) -- edit start index
+        end (int) -- edit end index
+    Returns:
+        str -- input line sans punctuation
+    """
+    line = re.sub(r' +([.,:;?!])', r'\1', line)
+    line = re.sub(r'([.,:;?!])(?![ \n\t.,:;?!*]|\Z)', r'\1 ', line)
+    line = re.sub(r'([.,:;?!]) +', r'\1 ', line)
+    return line.strip()
+
+
 def edit_eol_whitespace(line: str, start: int, end: int) -> str:
     """
     Remove EOL whitespace
@@ -171,14 +171,16 @@ def apply_edits(json_data, vale_dir=".vale"):
     """
 
     # variables for rules
-    whitespace_rule = "logionDoc.Spacing"
-    eol_rule = "logionDoc.EOLWhitespace"
-    contraction_rule = "logionDoc.Contractions"
-    special_words_rule = "logionDoc.SpecialWords"
-    head_punct_rule = "logionDoc.HeadPunct"
-    head_case_rule = "logionDoc.HeadCase"
-    # path to HeadCase.yml for exceptions list
-    exceptions_yml = '.vale/style/logionDoc/HeadCase.yml'
+    # EX: "Google.Spacing"
+    whitespace_rule = "style.rule"
+    eol_rule = "style.rule"
+    contraction_rule = "style.rule"
+    special_words_rule = "style.rule" # EX: "Google.WordList"
+    head_punct_rule = "style.rule"
+    head_case_rule = "style.rule"
+    # path to Headings.yml with exceptions list header sentence-style casing
+    # EX: .vale/style/Google/Headers.yml
+    exceptions_yml = '.vale/style/styleguide/rule.yml'
 
     # GLOBAL = edit modifies whole line
     GLOBAL_RULES = {
